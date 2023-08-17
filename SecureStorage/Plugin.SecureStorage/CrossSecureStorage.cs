@@ -34,14 +34,16 @@ namespace Plugin.SecureStorage
         /// Developer can know, if the platform is supported or not
         /// </summary>
         public static bool IsSupported => Implementation.Value == null ? false : true;
-
         static ISecureStorage CreateSecureStorage()
     {
-
-#if NETSTANDARD1_0
-            return null;
+      // Hacky way of dependency injection
+      // Do not change it or it will not build
+      // To use it on mobile devices you should specify __MOBILE__ precompiler flag
+      // in your Android/iOS project
+#if __MOBILE__
+      return new SecureStorageImplementation();
 #else
-        return new SecureStorageImplementation();
+      return null;
 #endif
     }
 
